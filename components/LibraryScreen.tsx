@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { LibraryBook } from '../types';
 import * as dbService from '../services/dbService';
 import Loader from './common/Loader';
-import { LibraryIcon, BookIcon, UploadIcon, MoreVerticalIcon, TrashIcon } from './common/Icons';
+import { LibraryIcon, BookIcon, UploadIcon, MoreVerticalIcon, TrashIcon, DownloadIcon } from './common/Icons';
 import UploadModal from './UploadModal';
 
 const LibraryScreen: React.FC = () => {
@@ -19,6 +19,7 @@ const LibraryScreen: React.FC = () => {
   const fetchBooks = useCallback(async () => {
     try {
       setIsLoading(true);
+      setError(null);
       const storedBooks = await dbService.getBooks();
       setBooks(storedBooks);
     } catch (err) {
@@ -64,6 +65,47 @@ const LibraryScreen: React.FC = () => {
   
   const handleToggleMenu = (bookId: number) => {
     setMenuOpenFor(prev => (prev === bookId ? null : bookId));
+  };
+  
+  const handleDownloadClick = (book: LibraryBook) => {
+    setMenuOpenFor(null); // Close the menu after clicking
+    const { jsPDF } = (window as any).jspdf;
+    if (!jsPDF) {
+      setError("PDF generation library not loaded. Please try again.");
+      return;
+    }
+
+    try {
+        const doc = new jsPDF();
+        doc.setFont('times', 'normal');
+        doc.setFontSize(12);
+
+        const textToUse = book.content;
+        const lines = doc.splitTextToSize(textToUse, 180); // 180mm margin for A4 page
+
+        const title = book.title;
+        doc.setFontSize(18);
+        doc.text(title, 105, 20, { align: 'center' }); // Center title
+        doc.setFontSize(12);
+
+        let y = 35; // Initial y position for content
+        const pageHeight = doc.internal.pageSize.height;
+        const marginBottom = 20;
+
+        for (let i = 0; i < lines.length; i++) {
+            if (y > pageHeight - marginBottom) { // Check for page break
+                doc.addPage();
+                y = 20; // Reset y position for new page
+            }
+            doc.text(lines[i], 15, y);
+            y += 7; // Increment y position for next line (7 is a reasonable line height)
+        }
+
+        doc.save(`${book.title}.pdf`);
+    } catch (e) {
+        console.error("Failed to generate PDF:", e);
+        setError("An unexpected error occurred while generating the PDF.");
+    }
   };
 
   const handleDeleteClick = (book: LibraryBook) => {
@@ -125,6 +167,13 @@ const LibraryScreen: React.FC = () => {
                     </button>
                     {menuOpenFor === book.id && (
                         <div ref={menuRef} className="absolute top-10 right-2 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 z-10 w-36">
+                            <button 
+                                onClick={() => handleDownloadClick(book)}
+                                className="w-full text-left flex items-center gap-2 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            >
+                                <DownloadIcon className="w-4 h-4" />
+                                Download
+                            </button>
                             <button 
                                 onClick={() => handleDeleteClick(book)}
                                 className="w-full text-left flex items-center gap-2 px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
