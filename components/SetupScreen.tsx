@@ -11,6 +11,7 @@ interface SetupScreenProps {
 const SetupScreen: React.FC<SetupScreenProps> = ({ onStart, onFullyGenerate }) => {
   const [title, setTitle] = useState('');
   const [objective, setObjective] = useState('');
+  const [style, setStyle] = useState('');
   const [estimatedPages, setEstimatedPages] = useState(100);
   const [initialContext, setInitialContext] = useState<string | undefined>(undefined);
   const [fileNames, setFileNames] = useState<string[]>([]);
@@ -71,7 +72,7 @@ const SetupScreen: React.FC<SetupScreenProps> = ({ onStart, onFullyGenerate }) =
 
   const handleStart = (isFullGenerate: boolean) => {
     if (isFormValid) {
-        const details = { title, objective, estimatedPages };
+        const details = { title, objective, estimatedPages, style };
         if (isFullGenerate) {
             onFullyGenerate(details, initialContext);
         } else {
@@ -110,6 +111,17 @@ const SetupScreen: React.FC<SetupScreenProps> = ({ onStart, onFullyGenerate }) =
               className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-stone-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Describe the main plot, theme, and desired ending of your book..."
               required
+            />
+          </div>
+          <div>
+            <label htmlFor="style" className="block text-sm font-medium text-stone-700 dark:text-stone-300">Writing Style (Optional)</label>
+            <input
+              type="text"
+              id="style"
+              value={style}
+              onChange={(e) => setStyle(e.target.value)}
+              className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-stone-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="e.g., Inspired by Ernest Hemingway, humorous and witty"
             />
           </div>
            <div>

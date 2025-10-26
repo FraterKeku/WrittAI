@@ -20,6 +20,7 @@ export interface BookDetails {
   title: string;
   objective: string;
   estimatedPages: number;
+  style?: string;
 }
 
 export interface LibraryBook {

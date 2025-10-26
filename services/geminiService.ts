@@ -11,7 +11,8 @@ export const generateNextPage = async (
   objective: string,
   phase: Phase,
   context: string,
-  pageCount: number
+  pageCount: number,
+  style?: string,
 ): Promise<string> => {
   try {
     const prompt = `
@@ -19,6 +20,11 @@ export const generateNextPage = async (
 
       BOOK OBJECTIVE:
       ${objective}
+
+      ${style ? `
+      WRITING STYLE:
+      Adopt the following writing style: ${style}
+      ` : ''}
 
       CURRENT PHASE: ${phase}
       This phase dictates the tone and progression of the narrative.

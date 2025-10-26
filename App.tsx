@@ -68,7 +68,7 @@ const App: React.FC = () => {
     setError(null);
     try {
       const context = isFirstPage ? (initialContext || '') : [pdfContext, ...generatedPages].join('\n\n---\n\n');
-      const newPage = await generateNextPage(bookDetails.objective, currentPhase, context, totalPageCount);
+      const newPage = await generateNextPage(bookDetails.objective, currentPhase, context, totalPageCount, bookDetails.style);
       setGeneratedPages(prev => [...prev, newPage]);
       setTotalPageCount(prev => prev + 1);
     } catch (err) {
