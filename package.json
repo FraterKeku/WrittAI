@@ -1,0 +1,67 @@
+{
+  "name": "writtai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "WrittAI - Your AI-powered book writing assistant.",
+  "author": "You",
+  "main": "electron.js",
+  "homepage": "./",
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "electron": "^31.0.2",
+    "electron-builder": "^24.13.3",
+    "vite": "^5.0.0"
+  },
+  "scripts": {
+    "start": "echo 'Please use electron:start for development'",
+    "build-react": "echo 'This command is now part of electron:pack'",
+    "electron:start": "electron .",
+    "electron:pack": "electron-builder"
+  },
+  "build": {
+    "appId": "com.yourname.writtai",
+    "productName": "WrittAI",
+    "files": [
+      "build/**/*",
+      "electron.js",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "assets",
+      "output": "dist"
+    },
+    "win": {
+      "target": "portable",
+      "icon": "build/vite.svg"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "build/vite.svg"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "build/vite.svg"
+    }
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

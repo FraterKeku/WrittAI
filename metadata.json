@@ -1,0 +1,5 @@
+{
+  "name": "WrittAI",
+  "description": "WrittAI is an AI-powered assistant to help you write a book, page by page. It maintains context through a cycle of generating content, prompting you to save as a PDF, and then using that PDF to continue the narrative, ensuring a cohesive story from beginning to end.",
+  "requestFramePermissions": []
+}
